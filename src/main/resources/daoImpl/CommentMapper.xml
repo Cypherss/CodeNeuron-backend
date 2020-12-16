@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.codeneuron.Dao.CommentMapper">
+    <select id="getCommentOfNodesForProject" resultType="com.example.codeneuron.PO.Comment">
+        select comment.id, comment.title, comment.content, comment.user_id as userId,comment.user_name as userName, comment.create_time as createTime, n.node_id as relatedId, 'node' as type
+        from comment,
+            (select *
+            from node_comment where node_id in
+                 (select id from node where project_id=#{projectId})) n
+        where comment.id = n.comment_id;
+    </select>
+
+    <select id="getCommentOfEdgesForProject" resultType="com.example.codeneuron.PO.Comment">
+        select comment.id, comment.title, comment.content, comment.user_id as userId,comment.user_name as userName, comment.create_time as createTime,n.edge_id as relatedId, 'edge' as type
+        from comment,
+             (select *
+              from edge_comment where edge_id in
+                                      (select id from edge where project_id=#{projectId})) n
+        where comment.id = n.comment_id;
+    </select>
+
+
+    <select id="getCommentOfDomainsForProject" resultType="com.example.codeneuron.PO.Comment">
+        select comment.id, comment.title, comment.content, comment.user_id as userId,comment.user_name as userName, comment.create_time as createTime,n.domain_id as relatedId, 'domain' as type
+        from comment,
+             (select *
+              from domain_comment where domain_id in
+                                      (select id from domain where project_id=#{projectId})) n
+        where comment.id = n.comment_id;
+    </select>
+
+    <select id="getCommentOfNodeByNodeId" resultType="com.example.codeneuron.PO.Comment">
+        select comment.id, comment.title, comment.content, comment.user_id as userId,comment.user_name as userName, comment.create_time as createTime
+        from comment where id in (select comment_id from node_comment where node_id=#{nodeId})
+    </select>
+
+    <select id="getCommentOfEdgeByEdgeId" resultType="com.example.codeneuron.PO.Comment">
+        select comment.id, comment.title, comment.content, comment.user_id as userId,comment.user_name as userName, comment.create_time as createTime
+        from comment where id in (select comment_id from edge_comment where edge_id=#{edgeId})
+    </select>
+
+    <select id="getCommentOfDomainByDomainId" resultType="com.example.codeneuron.PO.Comment">
+        select comment.id, comment.title, comment.content, comment.user_id as userId,comment.user_name as userName, comment.create_time as createTime
+        from comment where id in (select comment_id from domain_comment where domain_id=#{domainId})
+    </select>
+
+    <insert id="createComment" parameterType="com.example.codeneuron.PO.Comment" useGeneratedKeys="true" keyProperty="id">
+        insert into comment(title, content,user_id,user_name,create_time) values(#{title},#{content},#{userId},#{userName},#{createTime})
+    </insert>
+
+    <insert id="createCommentForNode">
+        insert into node_comment(node_id, comment_id) values(#{nodeId},#{commentId})
+    </insert>
+
+    <insert id="createCommentForEdge">
+        insert into edge_comment(edge_id, comment_id) values(#{edgeId},#{commentId})
+    </insert>
+
+    <insert id="createCommentForDomain">
+        insert into domain_comment(domain_id, comment_id) values(#{domainId},#{commentId})
+    </insert>
+
+    <delete id="deleteComment">
+        delete from comment where id=#{commentId}
+    </delete>
+
+    <delete id="deleteCommentForEdge">
+        delete from edge_comment where edge_id=#{edgeId} and comment_id=#{commentId}
+    </delete>
+
+    <delete id="deleteCommentForNode">
+        delete from node_comment where node_id=#{nodeId} and comment_id=#{commentId}
+    </delete>
+
+    <delete id="deleteCommentForDomain">
+        delete from domain_comment where domain_id=#{domainId} and comment_id=#{commentId}
+    </delete>
+
+    <update id="updateComment" parameterType="com.example.codeneuron.PO.Comment">
+        update comment set title=#{title},content=#{content},create_time=#{createTime} where id=#{id}
+    </update>
+
+</mapper>

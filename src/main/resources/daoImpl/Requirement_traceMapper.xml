@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.codeneuron.Dao.Requirement_traceMapper">
+    <insert id="createRequirementTrace">
+        insert into requirement_trace(requirementId,projectId,nodeId)
+        values(#{requirementId},#{projectId},#{nodeId})
+    </insert>
+
+    <select id="selectRequirementsByProjectIdAndNodeId" resultMap="Requirement_trace">
+        select * from requirement_trace where projectId=#{projectId} and nodeId=#{nodeId}
+    </select>
+
+    <select id="selectRequirementsByProjectIdAndRequirementId" resultMap="Requirement_trace">
+        select * from requirement_trace where projectId=#{projectId} and requirementId=#{requirementId}
+    </select>
+
+    <delete id="deleteRequirementTrace" parameterType="com.example.codeneuron.PO.Requirement_trace">
+        delete from requirement_trace where requirementId=#{requirementId} and projectId=#{projectId} and nodeId=#{nodeId}
+    </delete>
+
+
+    <resultMap id="Requirement_trace" type="com.example.codeneuron.PO.Requirement_trace">
+        <result column="requirementId" property="requirementId"></result>
+        <result column="projectId" property="projectId"></result>
+        <result column="nodeId" property="nodeId"></result>
+    </resultMap>
+
+</mapper>

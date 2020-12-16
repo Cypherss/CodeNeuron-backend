@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.codeneuron.Dao.DomainMapper">
+    <select id="getDomainByProjectIdAndCloseness" resultMap="Domain">
+        select * from domain where closeness_threshold=#{closenessThreshold} and project_id=#{projectId}
+    </select>
+
+    <select id="getDomainById" resultMap="Domain">
+        select * from domain where id=#{id}
+    </select>
+
+    <select id="getDomainByProjectId" resultMap="Domain">
+        select * from domain where project_id=#{projectId}
+    </select>
+
+    <insert id="insertDomain" parameterType="com.example.codeneuron.PO.Domain" useGeneratedKeys="true" keyProperty="id">
+        insert into domain(closeness_threshold, project_id) values (#{closenessThreshold}, #{projectId})
+    </insert>
+
+    <delete id="deleteDomainByProjectId">
+        delete from domain where project_id=#{projectId}
+    </delete>
+
+    <resultMap id="Domain" type="com.example.codeneuron.PO.Domain">
+        <result column="id" property="id"></result>
+        <result column="closeness_threshold" property="closenessThreshold"></result>
+        <result column="project_id" property="projectId"></result>
+    </resultMap>
+</mapper>

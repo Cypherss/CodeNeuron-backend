@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.codeneuron.Dao.ProjectMapper">
+    <insert id="createProject" parameterType="com.example.codeneuron.PO.Project" useGeneratedKeys="true" keyProperty="id">
+       insert into project(name,closeness_threshold,team_id) values(#{name},#{closenessThreshold},#{teamId})
+    </insert>
+
+    <delete id="deleteProject">
+        delete from project where id=#{id}
+    </delete>
+
+    <delete id="deleteProjectForTeam">
+        delete from project where team_id=#{teamId}
+    </delete>
+
+    <update id="updateProject" parameterType="com.example.codeneuron.PO.Project">
+        update project set name=#{name},closeness_threshold=#{closenessThreshold},team_id=#{teamId}
+        where id=#{id}
+    </update>
+
+    <update id="updateThreshold">
+        update project set closeness_threshold=#{newThreshold} where id=#{id}
+    </update>
+
+    <select id="findProjectById" resultMap="Project">
+        select * from project where id=#{id}
+    </select>
+
+    <select id="findProjectByTeamId" resultMap="Project">
+        select * from project where team_id=#{teamId}
+    </select>
+
+    <select id="findProjectByUserId" resultMap="Project">
+        select * from project where team_id in (select team_id from team_user where user_id=#{userId})
+    </select>
+
+    <resultMap id="Project" type="com.example.codeneuron.PO.Project">
+        <result column="id" property="id"></result>
+        <result column="name" property="name"></result>
+        <result column="closeness_threshold" property="closenessThreshold"></result>
+        <result column="team_id" property="teamId"></result>
+    </resultMap>
+</mapper>

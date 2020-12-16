@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.codeneuron.Dao.Node_codeMapper">
+    <select id="getNode_Code" resultMap="Node_code">
+        select * from node_code where node_id=#{nodeId}
+    </select>
+
+    <insert id="createNode_code" parameterType="com.example.codeneuron.PO.Node_code">
+        insert into node_code(node_id,code)
+        values(#{nodeId},#{code})
+    </insert>
+
+    <update id="updateNode_code" parameterType="com.example.codeneuron.PO.Node_code">
+        update node_code set code=#{code} where node_id=#{nodeId}
+    </update>
+
+    <delete id="deleteNode_code">
+        delete from node_code where node_id in
+        <foreach collection="list" index="index" item="item"
+                 separator="," open="(" close=")">
+            #{item.id}
+        </foreach>
+    </delete>
+
+    <resultMap id="Node_code" type="com.example.codeneuron.PO.Node_code">
+        <result column="node_id" property="nodeId"></result>
+        <result column="code" property="code"></result>
+    </resultMap>
+</mapper>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.codeneuron.Dao.EdgeMapper">
+    <delete id="deleteEdge" parameterType="com.example.codeneuron.PO.Edge">
+        delete from edge where id=#{id}
+    </delete>
+
+    <select id="selectAllEdges" resultMap="Edge">
+        select * from edge
+    </select>
+
+    <select id="selectEdgeById" resultMap="Edge">
+        select * from edge where id=#{id}
+    </select>
+
+    <select id="selectEdgeByCallerAndCallee" resultMap="Edge">
+        select * from edge where caller_name=#{callerName} and callee_name=#{calleeName}
+    </select>
+
+    <insert id="createNewEdge" useGeneratedKeys="true" keyProperty="id">
+        insert into edge(caller_name, callee_name, type_of_call,project_id)
+        values(#{callerName},#{calleeName},#{typeOfCall},#{projectId})
+    </insert>
+
+    <select id="selectEdgeByProjectId" resultMap="Edge">
+        select * from edge where project_id=#{projectId}
+    </select>
+
+    <update id="updateEdgeCloseness">
+        update edge
+        set  closeness=
+        <foreach collection="list" item="item" index="index"
+                 separator=" " open="case id" close="end">
+            when #{item.id} then #{item.closeness}
+        </foreach>
+        where id in
+        <foreach collection="list" index="index" item="item"
+                 separator="," open="(" close=")">
+            #{item.id}
+        </foreach>
+    </update>
+
+    <insert id="insertEdgeForProject" useGeneratedKeys="true" keyProperty="id">
+        insert into edge (caller_name, callee_name, type_of_call, project_id) values
+        <foreach item="item" collection="list" separator=",">
+            (#{item.callerName}, #{item.calleeName}, #{item.typeOfCall}, #{projectId})
+        </foreach>
+    </insert>
+
+    <delete id="deleteEdgeForProject">
+        delete from edge where project_id=#{projectId}
+    </delete>
+
+    <resultMap id="Edge" type="com.example.codeneuron.PO.Edge">
+        <result column="id" property="id"></result>
+        <result column="caller_name" property="callerName"></result>
+        <result column="callee_name" property="calleeName"></result>
+        <result column="type_of_call" property="typeOfCall"></result>
+        <result column="project_id" property="projectId"></result>
+    </resultMap>
+
+</mapper>

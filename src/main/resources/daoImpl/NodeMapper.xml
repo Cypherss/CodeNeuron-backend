@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.codeneuron.Dao.NodeMapper">
+    <delete id="deleteNode" parameterType="com.example.codeneuron.PO.Node">
+        delete from node where id=#{id}
+    </delete>
+
+    <delete id="deleteNodeByName" parameterType="com.example.codeneuron.PO.Node">
+        delete from node where name=#{name}
+    </delete>
+
+    <select id="selectAllNodes" resultMap="Node">
+        select * from node
+    </select>
+
+    <select id="selectNodeById" resultMap="Node">
+        select * from node where id=#{id}
+    </select>
+
+    <select id="selectNodeByName" resultMap="Node">
+        select * from node where name=#{name}
+    </select>
+
+    <select id="selectNodeByNameAndProjectId" resultMap="Node">
+        select * from node where name=#{name} and project_id=#{projectId}
+    </select>
+
+    <insert id="createNewNode" useGeneratedKeys="true" keyProperty="id">
+        insert into node(name,project_id)
+        values(#{name},#{projectId})
+    </insert>
+
+    <select id="selectNodeByProjectId" resultMap="Node">
+        select * from node where project_id=#{projectId}
+    </select>
+
+    <select id="selectNodeByDomain" resultMap="Node">
+        select * from node where id in
+        (select node_id from domain_node where domain_id=#{domainId})
+    </select>
+
+    <insert id="insertNodeForProject" useGeneratedKeys="true" keyProperty="id">
+        insert into node(name, project_id) VALUES
+        <foreach item="item" collection="list" separator=",">
+            (#{item.name},#{projectId})
+        </foreach>
+    </insert>
+
+    <insert id="insertNodeForDomain">
+        insert into domain_node(domain_id, node_id) VALUES
+        <foreach item="item" collection="list" separator=",">
+            (#{domainId},#{item.id})
+        </foreach>
+    </insert>
+
+    <delete id="deleteNodeForProject">
+        delete from node where project_id=#{projectId}
+    </delete>
+
+    <delete id="deleteNodeForDomain">
+        delete from domain_node where domain_id=#{domainId}
+    </delete>
+
+    <delete id="deleteNodeForDomains">
+        delete from domain_node where domain_id in
+        <foreach collection="list" index="index" item="item"
+                 separator="," open="(" close=")">
+            #{item.id}
+        </foreach>
+    </delete>
+
+    <update id="updateNodeX">
+        update node set x=#{x} where id=#{nodeId} and project_id=#{projectId}
+    </update>
+
+    <update id="updateNodeY">
+        update node set y=#{y} where id=#{nodeId} and project_id=#{projectId}
+    </update>
+
+    <select id="getNodeX" resultType="double">
+        select x from node where id=#{nodeId} and project_id=#{projectId}
+    </select>
+
+    <select id="getNodeY" resultType="double">
+        select y from node where id=#{nodeId} and project_id=#{projectId}
+    </select>
+
+    <resultMap id="Node" type="com.example.codeneuron.PO.Node">
+        <result column="id" property="id"></result>
+        <result column="name" property="name"></result>
+        <result column="project_id" property="projectId"></result>
+        <result column="x" property="x"></result>
+        <result column="y" property="y"></result>
+    </resultMap>
+
+</mapper>

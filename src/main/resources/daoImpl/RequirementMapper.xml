@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.codeneuron.Dao.RequirementMapper">
+    <insert id="createRequirement" useGeneratedKeys="true" keyProperty="id">
+        insert into requirement(name,description,projectId)
+        values(#{name},#{description},#{projectId})
+    </insert>
+
+    <delete id="deleteRequirement" parameterType="com.example.codeneuron.PO.Requirement">
+        delete from requirement where id=#{id}
+    </delete>
+
+    <update id="updateRequirement" parameterType="com.example.codeneuron.PO.Requirement">
+        update requirement set name=#{name},description=#{description},projectId=#{projectId} where id=#{id}
+    </update>
+
+    <select id="selectRequirementsByProjectId" resultMap="Requirement">
+        select * from requirement where projectId=#{projectId}
+    </select>
+
+    <select id="selectRequirementById" resultMap="Requirement">
+        select * from requirement where id=#{id}
+    </select>
+
+    <select id="selectRequirementByNameAndProjectId" resultMap="Requirement">
+        select * from requirement where name=#{name} and projectId=#{projectId}
+    </select>
+
+    <resultMap id="Requirement" type="com.example.codeneuron.PO.Requirement">
+        <result column="id" property="id"></result>
+        <result column="name" property="name"></result>
+        <result column="description" property="description"></result>
+        <result column="projectId" property="projectId"></result>
+    </resultMap>
+
+</mapper>

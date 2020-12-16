@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.codeneuron.Dao.TeamMapper">
+    <insert id="createTeam" parameterType="com.example.codeneuron.PO.Team" useGeneratedKeys="true" keyProperty="id">
+       insert into team(name,leader_id) values(#{name},#{leaderId})
+    </insert>
+
+    <delete id="deleteTeam">
+        delete from team where id=#{teamId}
+    </delete>
+
+    <delete id="deleteTeamUser">
+        delete from team_user where team_id=#{teamId}
+    </delete>
+
+    <delete id="deleteTeamForLeader">
+        delete from team where leader_id=#{leaderId}
+    </delete>
+
+    <delete id="deleteTeamUserForLeader">
+        delete from team_user where team_id in (select id from team where leader_id=#{leaderId})
+    </delete>
+
+    <insert id="addUserForTeam" parameterType="com.example.codeneuron.PO.TeamUser">
+       insert into team_user(team_id,user_id) values(#{teamId},#{userId})
+    </insert>
+
+    <delete id="deleteUserForTeam">
+        delete from team_user where team_id=#{teamId} and user_id=#{userId}
+    </delete>
+
+    <select id="findTeamsByUserId" resultMap="Team">
+        select * from team where id in (select distinct team_id from team_user where user_id=#{userId})
+    </select>
+
+    <select id="findTeamsByLeaderId" resultMap="Team">
+        select * from team where leader_id=#{leaderId}
+    </select>
+
+    <select id="findTeamUserById" resultMap="TeamUser">
+        select * from team_user where team_id=#{teamId}
+    </select>
+
+    <select id="findUsersByTeamId" resultMap="User">
+        select * from user where id in (select user_id from team_user where team_id=#{teamId}) and  role=1
+    </select>
+
+    <select id="getLeaderByTeamId" resultMap="User">
+        select * from user where id in (select leader_id from team where id=#{teamId}) and role=1
+    </select>
+
+    <select id="getTeamByTeamId" resultMap="Team">
+        select * from team where id=#{teamId}
+    </select>
+
+    <resultMap id="Team" type="com.example.codeneuron.PO.Team">
+        <result column="id" property="id"></result>
+        <result column="name" property="name"></result>
+        <result column="leader_id" property="leaderId"></result>
+    </resultMap>
+
+    <resultMap id="TeamUser" type="com.example.codeneuron.PO.TeamUser">
+        <result column="team_id" property="teamId"></result>
+        <result column="user_id" property="userId"></result>
+    </resultMap>
+
+    <resultMap id="User" type="com.example.codeneuron.PO.User">
+        <result column="id" property="id"></result>
+        <result column="name" property="name"></result>
+        <result column="password" property="password"></result>
+        <result column="role" property="role"></result>
+    </resultMap>
+</mapper>
