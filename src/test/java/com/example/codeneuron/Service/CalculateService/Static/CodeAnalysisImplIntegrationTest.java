@@ -56,6 +56,6 @@ public class CodeAnalysisImplIntegrationTest {
 //    @Test
 //    public void cal() throws Exception{
 //        CodeAnalysisImpl codeAnalysisImpl = new CodeAnalysisImpl(nodeMapper,edgeMapper,node_codeMapper,domainCal,initGraph,graphCal);
-////        codeAnalysisImpl.test();
+//        codeAnalysisImpl.test();
 //    }
 }
