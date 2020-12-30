@@ -541,7 +541,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'admin','123456',1),(2,'test2','123456',1),(3,'test3','123456',1),(4,'test4','123456',1);
+INSERT INTO `user` VALUES (1,'cypher','123456',1),(2,'nicolas','123456',1),(3,'karson','123456',1),(4,'cheney','123456',1);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
